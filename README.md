@@ -12,7 +12,11 @@ Plants vs. Zombies v1.0.40 (Mac) 简易键控框架
 
 2. 新建项目，添加 auto-pvz 文件夹里的文件
 
-3. 设置 Build Phases -> Link Binary With Librarys，添加CoreGraphics、Foundation
+3. 设置 Build Phases -> Link Binary With Librarys，添加CoreGraphics、Foundation、AppKit
+
+4. 设置以 root 身份运行：Product -> Scheme -> Edit Scheme -> Debug Process As 选 root
+
+5. 进入 endless 选卡界面，运行程序
 
 ## 注意事项
 
