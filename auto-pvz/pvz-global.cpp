@@ -31,6 +31,7 @@ std::string seed_name[11][8] =
     {"Mjxcts", "Mhp", "Mymts", "Mkfd", "Mds", "Myzbhs", "Mjzh", "Mxgts"}};
 
 Coord windowPos;
+Coord desktopSize;
 int scene;
 std::mutex mouse_lock;
 PvZOperation operation;

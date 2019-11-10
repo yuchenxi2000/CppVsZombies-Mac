@@ -1,4 +1,20 @@
 #include "operation.hpp"
+SafeClick::SafeClick() {
+    originPos = Mouse::getMouseLocation();
+    CGPoint point;
+    point.x = windowPos.x;
+    point.y = windowPos.y;
+    Mouse::rightClickCoord(point);
+}
+SafeClick::~SafeClick() {
+    CGPoint point;
+    point.x = windowPos.x;
+    point.y = windowPos.y;
+    Mouse::rightClickCoord(point);
+    CGEventRef ref = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, originPos, kCGMouseButtonRight);
+    CGEventPost(kCGSessionEventTap, ref);
+    CFRelease(ref);
+}
 CGPoint PvZOperation::getPointFromCoord(const Coord & coord) {
     CGPoint point;
     point.x = 80 * coord.col;
@@ -13,16 +29,9 @@ CGPoint PvZOperation::getPointFromCoord(const Coord & coord) {
     }else {
         point.y = 40 + 100 * coord.row;
     }
-    
     point.x += windowPos.x;
     point.y += windowPos.y;
     return point;
-}
-void PvZOperation::safeClick() {
-    CGPoint point;
-    point.x = windowPos.x;
-    point.y = windowPos.y;
-    Mouse::rightClickCoord(point);
 }
 void PvZOperation::selectSeed(int slot) {
     CGPoint point;
@@ -38,28 +47,36 @@ void PvZOperation::clickGrid(const Coord & coord) {
     Mouse::clickCoord(point);
 }
 void PvZOperation::plantSeed(int slot, const Coord & coord) {
-    safeClick();
+    SafeClick safeclick;
     selectSeed(slot);
-    clickGrid(coord);
-    clickGrid(coord);
-    clickGrid(coord);
-    safeClick();
+    CGPoint point = getPointFromCoord(coord);
+    Mouse::clickCoord(point);
+    Mouse::clickCoord(point);
+    Mouse::clickCoord(point);
 }
-void PvZOperation::fireCob(const Coord & grid, const Coord & firepos) {
-    safeClick();
+void PvZOperation::safeFireCob(const Coord & grid, const Coord & firepos) {
+    SafeClick safeclick;
     CGPoint point = getPointFromCoord(grid);
     Mouse::clickCoord(point);
     Mouse::clickCoord(point);
     Mouse::clickCoord(point);
-    
     CGPoint destination = getPointFromCoord(firepos);
     Mouse::clickCoord(destination);
     Mouse::clickCoord(destination);
     Mouse::clickCoord(destination);
-    safeClick();
+}
+void PvZOperation::fireCob(const Coord & grid, const Coord & firepos) {
+    CGPoint point = getPointFromCoord(grid);
+    Mouse::clickCoord(point);
+    Mouse::clickCoord(point);
+    Mouse::clickCoord(point);
+    CGPoint destination = getPointFromCoord(firepos);
+    Mouse::clickCoord(destination);
+    Mouse::clickCoord(destination);
+    Mouse::clickCoord(destination);
 }
 void PvZOperation::delayedFireCob(const Coord & grid, const Coord & firepos, int ms) {
-    safeClick();
+    SafeClick safeclick;
     CGPoint point = getPointFromCoord(grid);
     Mouse::clickCoord(point);
     Mouse::clickCoord(point);
@@ -69,5 +86,4 @@ void PvZOperation::delayedFireCob(const Coord & grid, const Coord & firepos, int
     Mouse::clickCoord(destination);
     Mouse::clickCoord(destination);
     Mouse::clickCoord(destination);
-    safeClick();
 }

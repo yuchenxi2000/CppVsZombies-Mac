@@ -15,6 +15,7 @@ struct Coord {
 };
 class Mouse {
 public:
+    static CGPoint getMouseLocation();
     static void clickCoord(const CGPoint & point);
     static void rightClickCoord(const CGPoint & point);
     static void delayedClickCoord(const CGPoint & point, int ms);

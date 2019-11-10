@@ -11,6 +11,10 @@ void PvZ::FindProcessByWindowName() {
     CFStringRef pvz = CFStringCreateWithCString(kCFAllocatorDefault, "Plants vs. Zombies 1.0.40", kCFStringEncodingASCII);
     CFStringRef pvzowner = CFStringCreateWithCString(kCFAllocatorDefault, "Plants vs. Zombies", kCFStringEncodingASCII);
     
+    CFStringRef desktop_name = CFStringCreateWithCString(kCFAllocatorDefault, "Desktop", kCFStringEncodingASCII);
+    
+    bool pvz_found = false, desktop_found = false;
+    
     CFIndex cnt = CFArrayGetCount(windows);
     for (CFIndex i = 0; i < cnt; ++i) {
         CFDictionaryRef dic = (CFDictionaryRef)CFArrayGetValueAtIndex(windows, i);
@@ -18,21 +22,29 @@ void PvZ::FindProcessByWindowName() {
         // window owner name
         const CFStringRef name = (const CFStringRef)CFDictionaryGetValue(dic, kCGWindowName);
         const CFStringRef ownername = (const CFStringRef)CFDictionaryGetValue(dic, kCGWindowOwnerName);
+        
         if ((name != 0 && CFStringCompare(name, pvz, kCFCompareNonliteral) == kCFCompareEqualTo) || (ownername != 0 && CFStringCompare(ownername, pvzowner, kCFCompareNonliteral) == kCFCompareEqualTo)) {
+            // check if is real window
+            CFBooleanRef onscreen = (CFBooleanRef)CFDictionaryGetValue(dic, kCGWindowIsOnscreen);
+            if (onscreen == 0 || !CFBooleanGetValue(onscreen)) {
+                continue;
+            }
+            
             // pid
             const CFNumberRef num = (const CFNumberRef)CFDictionaryGetValue(dic, kCGWindowOwnerPID);
+            if (num == 0) {
+                std::cerr << "cannot get game pid!" << std::endl;
+                exit(EXIT_FAILURE);
+            }
             CFNumberGetValue(num, kCFNumberIntType, &pid);
             std::cout << "pid: " << pid << std::endl;
             
-            CFBooleanRef onscreen = (CFBooleanRef)CFDictionaryGetValue(dic, kCGWindowIsOnscreen);
-            if (CFBooleanGetValue(onscreen)) {
-                std::cout << "PvZ is on screen" << std::endl;
-            }else {
-                std::cout << "PvZ is in background" << std::endl;
-            }
-            
             // window position
             const CFDictionaryRef rectdic = (const CFDictionaryRef)CFDictionaryGetValue(dic, kCGWindowBounds);
+            if (rectdic == 0) {
+                std::cerr << "cannot get game window position!" << std::endl;
+                exit(EXIT_FAILURE);
+            }
             CGRect rect;
             CGRectMakeWithDictionaryRepresentation(rectdic, &rect);
             
@@ -47,20 +59,40 @@ void PvZ::FindProcessByWindowName() {
             
             std::cout << "window position: x " << windowPos.x << " y " << windowPos.y << std::endl;
             
-            CFRelease(pvz);
-            CFRelease(pvzowner);
-            CFRelease(windows);
+            pvz_found = true;
+        }else if (name != 0 && CFStringCompare(name, desktop_name, kCFCompareNonliteral) == kCFCompareEqualTo) {
+            // desktop size
+            const CFDictionaryRef rectdic = (const CFDictionaryRef)CFDictionaryGetValue(dic, kCGWindowBounds);
+            if (rectdic == 0) {
+                std::cerr << "cannot get desktop size!" << std::endl;
+                exit(EXIT_FAILURE);
+            }
+            CGRect rect;
+            CGRectMakeWithDictionaryRepresentation(rectdic, &rect);
             
-            return;
+            desktopSize.x = rect.size.width;
+            desktopSize.y = rect.size.height;
+            std::cout << "desktop size: x " << desktopSize.x << " y " << desktopSize.y << std::endl;
+            
+            desktop_found = true;
         }
     }
     
     CFRelease(pvz);
     CFRelease(pvzowner);
     CFRelease(windows);
+    CFRelease(desktop_name);
     
-    std::cerr << "cannot find game! exit" << std::endl;
-    exit(EXIT_FAILURE);
+    if (!pvz_found) {
+        std::cerr << "cannot find game!" << std::endl;
+    }
+    if (!desktop_found) {
+        std::cerr << "cannot get desktop size!" << std::endl;
+    }
+    if (!(pvz_found && desktop_found)) {
+        std::cerr << "exit" << std::endl;
+        exit(EXIT_FAILURE);
+    }
 }
 PvZ::PvZ() {
     FindProcessByWindowName();

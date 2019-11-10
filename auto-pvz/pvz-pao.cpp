@@ -47,6 +47,8 @@ void PvZCannon::DelayedFire(const Coord & firepos, int cs) {
 }
 
 void PvZCannon::Fire(std::initializer_list<Coord> firepos) {
+    std::lock_guard<std::mutex> lkg(mouse_lock);
+    SafeClick safeclick;
     int i = 0;
     int cobs = cannonlist.size();
     int firecnt = 0;
@@ -60,7 +62,8 @@ void PvZCannon::Fire(std::initializer_list<Coord> firepos) {
             }
             if (pvz.GetCannonState(cannon.index) == cob_ready) {
                 ++firecnt;
-                Fire(cannon.position, pos);
+                operation.fireCob(cannon.position, pos);
+//                Fire(cannon.position, pos);
                 ++i;
                 break;
             }else {
@@ -77,5 +80,5 @@ void PvZCannon::Fire(std::initializer_list<Coord> firepos) {
 
 void PvZCannon::Fire(const Coord & cob, const Coord & firepos) {
     std::lock_guard<std::mutex> lkg(mouse_lock);
-    operation.fireCob(cob, firepos);
+    operation.safeFireCob(cob, firepos);
 }

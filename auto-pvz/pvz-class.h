@@ -13,6 +13,7 @@
 class PvZOperation;
 
 extern Coord windowPos;
+extern Coord desktopSize;
 extern int scene;
 extern std::mutex mouse_lock;
 
