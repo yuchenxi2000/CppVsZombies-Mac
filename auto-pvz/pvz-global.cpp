@@ -40,3 +40,4 @@ PvZ pvz;
 PvZSlot slot;
 PvZCannon cannon;
 PvZIce pvzice;
+PvZDancer dancer;

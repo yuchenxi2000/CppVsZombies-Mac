@@ -98,11 +98,11 @@ PvZ::PvZ() {
     FindProcessByWindowName();
     memory.Attach(pid);
     scene = CurScene();
-    plantOffset = ReadMemory<uint32_t>(base, 0x780, 0xA0);
-    slotOffset = ReadMemory<int>(base, 0x780, 0x138);
     while (CurGameUI() != 3) {
         usleep(1000000);
     }
+    plantOffset = ReadMemory<uint32_t>(base, 0x780, 0xA0);
+    slotOffset = ReadMemory<uint32_t>(base, 0x780, 0x138);
     std::cout << "game start!" << std::endl;
 }
 PvZ::~PvZ() {
@@ -132,6 +132,15 @@ void PvZ::WriteMemory(std::array<T, size> value, Args... address) {
 
 void PvZ::WriteMemory(std::initializer_list<byte> il, uintptr_t address) {
     memory.Write(address, il.size(), (void *) il.begin());
+}
+
+bool PvZ::GamePaused() {
+    return pvz.ReadMemory<bool>(base, 0x780, 0x158);
+}
+
+void PvZ::PauseGame(bool pause) {
+    uint32_t addr = ReadMemory<int>(base, 0x780) + 0x158;
+    memory.Write<uint8_t>(pause, addr);
 }
 
 int PvZ::CurGameUI() {

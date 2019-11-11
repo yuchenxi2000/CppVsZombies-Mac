@@ -33,5 +33,8 @@ void RunInThread(void (*func)());
 #define TryPao Pao
 #define DelayedFire cannon.DelayedFire
 #define Shovel pvz.Shovel
+#define Sleep pvz.Sleep
+#define StartStopDancerThread dancer.Start
+#define CancelStopDancerThread dancer.Pause
 
 #endif /* auto_pvz_h */

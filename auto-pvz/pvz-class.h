@@ -35,6 +35,7 @@ enum CannonState {
  * （寻找游戏窗口，读取内存）
  */
 class PvZ {
+public:
     template<typename T, typename... Args>
     T ReadMemory(Args... address);
     
@@ -58,6 +59,9 @@ class PvZ {
     uint32_t slotOffset;
     Memory memory;
 public:
+    // game, internal timer
+    bool GamePaused();
+    void PauseGame(bool);
     int CurGameUI();
     int CurGameTime();
     int CurrentWave();
@@ -167,11 +171,24 @@ public:
     void Card(const std::string & name, const Coord & pos);
 };
 
+class PvZDancer {
+    std::thread th;
+    pthread_t handle;
+    bool running;
+public:
+    uint32_t addr;
+    PvZDancer();
+    ~PvZDancer();
+    void Start();
+    void Pause();
+};
+
 extern std::string seed_name[11][8];
 extern PvZOperation operation;
 extern PvZ pvz;
 extern PvZSlot slot;
 extern PvZCannon cannon;
 extern PvZIce pvzice;
+extern PvZDancer dancer;
 
 #endif /* pvz_class_h */

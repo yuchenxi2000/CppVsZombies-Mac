@@ -14,14 +14,13 @@
  * Product->Scheme->Edit Scheme->Debug Process As选root
  *
  * 函数基本和lmintlcx的python框架一致
- * （当然一些功能未实现。macOS 10.15废了32位程序，搞得我不想认真弄了。。。）
+ * （当然一些功能未实现。macOS 10.15 废了32位程序，搞得我不想认真弄了。。。）
  *
  * 改出怪、修改阳光、自动收集请配合Mac版修改器使用。
  * Mac版修改器：https://github.com/zhoury18/PvZHelper-Mac
  */
 int main(int argc, const char * argv[]) {
     // 二十四炮键控脚本
-//    pe_24();
-    pe_4();
+    pe_24();
     return 0;
 }
