@@ -21,6 +21,10 @@
  */
 int main(int argc, const char * argv[]) {
     // 二十四炮键控脚本
-    pe_24();
+//    pe_24();
+    sleep(5);
+    Fire({{1,7.7},{5,7.7}});
+//    Fire({{1,7.7}});
+//    pe_12();
     return 0;
 }

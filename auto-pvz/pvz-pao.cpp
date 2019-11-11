@@ -62,8 +62,11 @@ void PvZCannon::Fire(std::initializer_list<Coord> firepos) {
             }
             if (pvz.GetCannonState(cannon.index) == cob_ready) {
                 ++firecnt;
+                CGPoint point;
+                point.x = windowPos.x;
+                point.y = windowPos.y;
+                Mouse::rightClickCoord(point);
                 operation.fireCob(cannon.position, pos);
-//                Fire(cannon.position, pos);
                 ++i;
                 break;
             }else {
