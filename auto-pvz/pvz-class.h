@@ -103,12 +103,6 @@ public:
     void Wait(int cs);
     // 等到距本波刷新点cs位置
     void Until(int cs);
-    // 手动发炮
-    void Fire(const Coord & cob, const Coord & firepos);
-    // 程序自动找炮发射
-    void Fire(std::initializer_list<Coord> firepos);
-    // 程序自动找炮发射，延迟cs点炮
-    void DelayedFire(const Coord & firepos, int cs);
     // 手动种植物
     void PlantSeed(int slot, const Coord & pos);
     // 铲植物

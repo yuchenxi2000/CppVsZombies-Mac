@@ -11,7 +11,7 @@ SafeClick::~SafeClick() {
     point.x = windowPos.x;
     point.y = windowPos.y;
     Mouse::rightClickCoord(point);
-    CGEventRef ref = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, originPos, kCGMouseButtonRight);
+    CGEventRef ref = CGEventCreateMouseEvent(NULL, kCGEventMouseMoved, originPos, kCGMouseButtonRight);
     CGEventPost(kCGSessionEventTap, ref);
     CFRelease(ref);
 }
@@ -46,9 +46,20 @@ void PvZOperation::clickGrid(const Coord & coord) {
     CGPoint point = getPointFromCoord(coord);
     Mouse::clickCoord(point);
 }
-void PvZOperation::plantSeed(int slot, const Coord & coord) {
+void PvZOperation::safePlantSeed(int slot, const Coord & coord) {
     SafeClick safeclick;
     selectSeed(slot);
+    CGPoint point = getPointFromCoord(coord);
+    Mouse::clickCoord(point);
+    Mouse::clickCoord(point);
+    Mouse::clickCoord(point);
+}
+void PvZOperation::safeShovelPlant(const Coord & coord) {
+    SafeClick safeclick;
+    CGPoint shovel;
+    shovel.x = 640 + windowPos.x;
+    shovel.y = 36 + windowPos.y;
+    Mouse::clickCoord(shovel);
     CGPoint point = getPointFromCoord(coord);
     Mouse::clickCoord(point);
     Mouse::clickCoord(point);
@@ -75,7 +86,7 @@ void PvZOperation::fireCob(const Coord & grid, const Coord & firepos) {
     Mouse::clickCoord(destination);
     Mouse::clickCoord(destination);
 }
-void PvZOperation::delayedFireCob(const Coord & grid, const Coord & firepos, int ms) {
+void PvZOperation::safeDelayedFireCob(const Coord & grid, const Coord & firepos, int ms) {
     SafeClick safeclick;
     CGPoint point = getPointFromCoord(grid);
     Mouse::clickCoord(point);

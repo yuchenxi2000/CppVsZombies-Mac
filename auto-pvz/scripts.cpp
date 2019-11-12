@@ -1,35 +1,4 @@
 #include "scripts.hpp"
-//void pe_12() {
-//    for (int i = 1; i <= 20; ++i) {
-//        if (i == 20) {
-//            bot.WaitUntil(-200, i);
-//            bot.DelayedFire({4,7}, 30);
-//        }
-//        bot.WaitUntil(-100, i);
-//        bot.Fire({{2,9}, {5,9}});
-//        if (i == 10) {
-//            bot.Wait(373);
-//            bot.PlantSeed(2, {2,9});
-//        }
-//    }
-//    bot.WaitUntil(200, 20);
-//    bot.Fire({{2,9}, {5,9}});
-//}
-//
-//void pe_8() {
-//    for (int wave = 1; wave <= 20; ++wave) {
-//        bot.WaitUntil(300, wave);
-//        bot.Fire({{2, 8.3}, {5, 8.3}});
-//    }
-//}
-//
-//void pe_10() {
-//    for (int wave = 1; wave <= 20; ++wave) {
-//        bot.WaitUntil(100, wave);
-//        bot.Fire({{2, 8.7}, {5, 8.7}});
-//    }
-//}
-
 void pe_12() {
     for (int i = 1; i <= 20; ++i) {
         if (i == 20) {
@@ -85,10 +54,10 @@ void pe_24() {
                 Fire({{2,9},{5,9},{2,9},{5,9}});
                 Wait(108);
                 Fire({{1,8.8},{5,8.8}});
-//                if (wave == 9 || wave == 19) {
-//                    Wait(601 + 95 - 108 - 15);
-//                    Fire({{2,9},{5,9}});
-//                }
+                if (wave == 9 || wave == 19) {
+                    Wait(601 + 95 - 108 - 15);
+                    Fire({{2,9},{5,9}});
+                }
                 break;
                 
             case 10:
@@ -115,92 +84,6 @@ void pe_24() {
 }
 
 void de_8() {
-    AutoFillIce({{2, 1}, {4, 1}, {3, 7}});
-    for (int wave = 1; wave <= 20; ++wave) {
-        WaitUntil(-200, wave);
-        switch (wave) {
-            case 1:
-            case 4:
-            case 7:
-            case 10:
-            case 13:
-            case 16:
-            case 19:
-                if (wave == 10) {
-                    WaitUntil(-55, wave);
-                }else {
-                    WaitUntil(-95, wave);
-                }
-                Fire({{2,9}, {4,9}});
-                WaitUntil(601+10-298, wave);
-                Coffee();
-                if (wave == 19) {
-                    WaitUntil(601 + 1437 - 200 - 373, wave);
-                    Fire({{2,8.7},{4,8.7}});
-                    WaitUntil(4500-200-373, wave);
-                    Fire({{2,8.4},{4,8.4}});
-                }
-                break;
-
-            case 2:
-            case 5:
-            case 8:
-            case 11:
-            case 14:
-            case 17:
-                if (wave == 2) {
-                    WaitUntil(10+400, wave);
-                    Card("wg", {3,9});
-                }else if (wave == 11) {
-                    WaitUntil(10+400-100, wave);
-                    Card("ytzd", {3,8});
-                }
-                if (wave == 2) {
-                    WaitUntil(750, wave);
-                    Card("xpg", {3,8});
-                    Wait(100);
-                    Shovel({3,8});
-                }
-                WaitUntil(1437-200-373, wave);
-                Fire({{2,8.7}, {4,8.7}});
-                WaitUntil(1437+20-298, wave);
-                Coffee();
-                break;
-
-            case 3:
-            case 6:
-            case 9:
-            case 12:
-            case 15:
-            case 18:
-                WaitUntil(-150, wave);
-                Fire({{2,8.5}, {4,8.5}});
-                WaitUntil(1437 - 200 - 373, wave);
-                Fire({{2,8.7}, {4,8.7}});
-                if (wave == 9) {
-                    WaitUntil(1437-95, wave);
-                    Fire({{2,8.7}, {4,8.7}});
-                    WaitUntil(4500 - 200 - 373, wave);
-                    Fire({{2,8.4}, {4,8.4}});
-                }
-                break;
-
-            case 20:
-                WaitUntil(-60, wave);
-                Fire({{2,9}, {4,9}, {2,9}, {4,9}});
-                WaitUntil(601-298, wave);
-                Coffee();
-                WaitUntil(601+10, wave);
-                break;
-
-            default:
-                break;
-        }
-    }
-    //                                    Card("复制冰", (4, 1))  # 最后一个存冰
-}
-
-void de_8_n() {
     AutoFillIce({{2, 1}, {4, 1}, {3, 7}});
     for (int wave = 1; wave <= 20; ++wave) {
         Prejudge(-200, wave);
@@ -266,8 +149,8 @@ void de_8_n() {
                 if (wave == 9) {
                     Until(1437-95);
                     TryPao({{2,8.7}, {4,8.7}});
-//                    Until(4500 - 200 - 373);
-//                    TryPao({{2,8.4}, {4,8.4}});
+                    Until(4500 - 200 - 373);
+                    TryPao({{2,8.4}, {4,8.4}});
                 }
                 break;
                 
@@ -361,4 +244,18 @@ void pe_4() {
         }
     }
     
+}
+
+void me_10() {
+    for (int i = 1; i <= 20; ++i) {
+        if (i == 20) { // 冰消空降
+            Prejudge(-100, i);
+            Card("hp", {3, 8});
+            Card("hbg", {3, 8});
+            Delay(100 + 1);
+            Shovel({3, 8});
+        }
+        Prejudge(125, i);
+        Pao({{2,9}, {4,9}});
+    }
 }

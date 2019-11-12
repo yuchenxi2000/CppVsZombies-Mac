@@ -1,7 +1,6 @@
 #ifndef auto_pvz_h
 #define auto_pvz_h
 #include "pvz-class.h"
-
 /*
  * 为了适配pvzscript, cvz的接口
  * 给函数设置了多个名称
@@ -28,6 +27,20 @@ void RunInThread(void (*func)());
 #define Delay Wait
 #define PlantSeed pvz.PlantSeed
 #define Card slot.Card
+/*
+ * 暂时没有炮序、铲种炮功能
+ * Pao, TryPao, Fire 都是程序自动找炮发射
+ *
+ * 如果出现炮落点在自身附近无法快速发炮请使用 DelayedFire
+ *
+ * Pao 函数调用必须有间隔（之间有 Sleep, Delay, Prejudge）。
+ * 如果 Pao 连续无间隔两次调用会导致无法发射。
+ * 如果要同时发射两门炮，请这样写：
+ * Pao({{2,9}, {5,9}});
+ *
+ * 目前为止还没有发现“上界之风”现象，1.0.40版屋顶炮基本准确
+ * 所以不会有 RoofPao。
+ */
 #define Fire cannon.Fire
 #define Pao Fire
 #define TryPao Pao

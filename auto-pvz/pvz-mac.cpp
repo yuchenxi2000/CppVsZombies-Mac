@@ -319,18 +319,19 @@ void PvZ::Until(int cs) {
 
 void PvZ::PlantSeed(int slot, const Coord & pos) {
     std::lock_guard<std::mutex> lkg(mouse_lock);
-    operation.plantSeed(slot, pos);
+    operation.safePlantSeed(slot, pos);
 }
 
 void PvZ::Shovel(const Coord & plant) {
     std::lock_guard<std::mutex> lkg(mouse_lock);
-    CGPoint shovel;
-    shovel.x = 640 + windowPos.x;
-    shovel.y = 36 + windowPos.y;
-    Mouse::clickCoord(shovel);
-    operation.clickGrid(plant);
-    operation.clickGrid(plant);
-    operation.clickGrid(plant);
+    operation.safeShovelPlant(plant);
+//    CGPoint shovel;
+//    shovel.x = 640 + windowPos.x;
+//    shovel.y = 36 + windowPos.y;
+//    Mouse::clickCoord(shovel);
+//    operation.clickGrid(plant);
+//    operation.clickGrid(plant);
+//    operation.clickGrid(plant);
 }
 
 //debug

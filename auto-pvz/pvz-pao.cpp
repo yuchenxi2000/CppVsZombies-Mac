@@ -35,9 +35,7 @@ void PvZCannon::DelayedFire(const Coord & firepos, int cs) {
             exit(233);
         }
         if (pvz.GetCannonState(cannon.index) == cob_ready) {
-            printf("fire!\n");
-            std::cout << "row: " << cannon.position.row << " col: " << cannon.position.col << std::endl;
-            operation.delayedFireCob(cannon.position, firepos, cs * 10000);
+            operation.safeDelayedFireCob(cannon.position, firepos, cs * 10000);
             return;
         }else {
             ++i;
@@ -67,6 +65,7 @@ void PvZCannon::Fire(std::initializer_list<Coord> firepos) {
                 point.y = windowPos.y;
                 Mouse::rightClickCoord(point);
                 operation.fireCob(cannon.position, pos);
+                Mouse::rightClickCoord(point);
                 ++i;
                 break;
             }else {
