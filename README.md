@@ -16,11 +16,13 @@ Plants vs. Zombies v1.0.40 (Mac) 简易键控框架
 
 4. 设置以 root 身份运行：Product -> Scheme -> Edit Scheme -> Debug Process As 选 root
 
-5. 进入 endless 选卡界面，运行程序
+5. 进入 endless 选卡界面，运行程序（在非选卡界面运行不保证鼠标不鬼畜，233）
 
 ## 注意事项
 
 见代码注释
+
+建议仔细看 main.cpp, auto-pvz.h, pvz-global.cpp 里的注释
 
 ## 致谢
 
