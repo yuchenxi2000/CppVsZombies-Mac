@@ -34,6 +34,8 @@ Coord windowPos;
 Coord desktopSize;
 int scene;
 std::mutex mouse_lock;
+
+KeyBoard keyboard;
 PvZOperation operation;
 
 PvZ pvz;

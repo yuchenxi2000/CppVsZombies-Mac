@@ -210,7 +210,7 @@ void PvZ::UntilCountDown(int cs, bool isHugeWave) {
         }
     }
 }
-// [750 if wave % 10 == 0 else 599 if wave == 1 else 200 for wave in range(1, 21)]
+
 int refresh_time[] = {
     599, 200, 200, 200, 200,
     200, 200, 200, 200, 750,
@@ -256,58 +256,6 @@ void PvZ::WaitUntil(int cs, int wave) {
             Wait(waittime);
         }
     }
-//    if (cs < 0) { // prejudge
-//        if (wave == 10 || wave == 20) {
-//            bool hugewaveStart = false;
-//            while (true) {
-//                int refreshRemain = RefreshCountdown();
-//                int hugewaveRemain = HugeWaveCountdown();
-//                if (hugewaveRemain > 0) {
-//                    hugewaveStart = true;
-//                }
-//                if (CurrentWave() >= wave) {
-//                    return;
-//                }
-//                int count_down;
-//                if (refreshRemain == 4 || refreshRemain == 5) {
-//                    count_down = hugewaveRemain;
-//                }else {
-//                    count_down = hugewaveRemain-5+750;
-//                }
-//                if (hugewaveStart && hugewaveRemain + refreshRemain <= -cs) {
-//                    return;
-//                }
-//                usleep(main_precision);
-//            }
-//        }else {
-//            while (true) {
-//                int curwave = CurrentWave();
-//                if (curwave >= wave) {
-//                    return;
-//                }
-//                int refreshRemain = RefreshCountdown();
-//                if (curwave == wave - 1 && refreshRemain <= -cs) {
-////                    refresh_time = CurGameTime() + refreshRemain;
-//                    return;
-//                }
-//                usleep(main_precision);
-//            }
-//        }
-//    }else { // react
-//        while (true) {
-//            int curwave = CurrentWave();
-//            if (curwave > wave) {
-//                return;
-//            }
-//            int waveinterval = WaveInterval();
-//            int countdown = RefreshCountdown();
-//            if (curwave == wave && waveinterval - countdown >= cs) {
-////                refresh_time = CurGameTime() + countdown;
-//                return;
-//            }
-//            usleep(main_precision);
-//        }
-//    }
 }
 
 void PvZ::Until(int cs) {
@@ -325,13 +273,6 @@ void PvZ::PlantSeed(int slot, const Coord & pos) {
 void PvZ::Shovel(const Coord & plant) {
     std::lock_guard<std::mutex> lkg(mouse_lock);
     operation.safeShovelPlant(plant);
-//    CGPoint shovel;
-//    shovel.x = 640 + windowPos.x;
-//    shovel.y = 36 + windowPos.y;
-//    Mouse::clickCoord(shovel);
-//    operation.clickGrid(plant);
-//    operation.clickGrid(plant);
-//    operation.clickGrid(plant);
 }
 
 //debug

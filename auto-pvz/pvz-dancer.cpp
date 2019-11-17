@@ -2,6 +2,7 @@
 PvZDancer::PvZDancer() {
     addr = pvz.ReadMemory<int>(pvz.base) + 0x800;
     running = false;
+    nogui = false;
 }
 
 void _Dancer() {
@@ -11,12 +12,27 @@ void _Dancer() {
     while (true) {
         while ((((pvz.ReadMemory<int>(dancer.addr) + 10) % (20 * 23)) / 20) > 11)
             pvz.Sleep(1);
-        //模拟敲击空格
-        pvz.PauseGame(true);
+        
+        if (dancer.nogui) {
+            // 写内存
+            pvz.PauseGame(true);
+        }else {
+            //模拟敲击空格
+            keyboard.PressSpace();
+        }
+        
         pvz.Sleep(50);
         while (((pvz.ReadMemory<int>(dancer.addr) % (20 * 23)) / 20) <= 11)
             pvz.Sleep(1);
-        pvz.PauseGame(false);
+        
+        if (dancer.nogui) {
+            // 写内存
+            pvz.PauseGame(false);
+        }else {
+            //模拟敲击空格
+            keyboard.PressSpace();
+        }
+        
         pvz.Sleep(10);
     }
 }
@@ -31,12 +47,24 @@ void PvZDancer::Start() {
 void PvZDancer::Pause() {
     pthread_cancel(handle);
     running = false;
-    pvz.PauseGame(false);
+    if (dancer.nogui) {
+        // 写内存
+        pvz.PauseGame(false);
+    }else {
+        //模拟敲击空格
+        keyboard.PressSpace();
+    }
 }
 
 PvZDancer::~PvZDancer() {
     if (running) {
         pthread_cancel(handle);
-        pvz.PauseGame(false);
+        if (dancer.nogui) {
+            // 写内存
+            pvz.PauseGame(false);
+        }else {
+            //模拟敲击空格
+            keyboard.PressSpace();
+        }
     }
 }

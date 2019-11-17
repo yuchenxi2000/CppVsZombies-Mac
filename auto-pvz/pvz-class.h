@@ -2,6 +2,7 @@
 #define pvz_class_h
 #include <iostream>
 #include "mouse.hpp"
+#include "keyboard.hpp"
 #include "operation.hpp"
 #include "memory.h"
 #include <thread>
@@ -170,6 +171,7 @@ class PvZDancer {
     pthread_t handle;
     bool running;
 public:
+    bool nogui; // 放挡视线
     uint32_t addr;
     PvZDancer();
     ~PvZDancer();
@@ -178,6 +180,7 @@ public:
 };
 
 extern std::string seed_name[11][8];
+extern KeyBoard keyboard;
 extern PvZOperation operation;
 extern PvZ pvz;
 extern PvZSlot slot;
