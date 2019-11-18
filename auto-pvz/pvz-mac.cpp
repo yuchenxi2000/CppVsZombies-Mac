@@ -99,11 +99,18 @@ PvZ::PvZ() {
     memory.Attach(pid);
     scene = CurScene();
     while (CurGameUI() != 3) {
-        usleep(1000000);
+        usleep(100000); // 0.1 s
     }
     plantOffset = ReadMemory<uint32_t>(base, 0x780, 0xA0);
     slotOffset = ReadMemory<uint32_t>(base, 0x780, 0x138);
     std::cout << "game start!" << std::endl;
+    // 窗口前置
+    WindowFront();
+    // 取消暂停
+    if (pvz.GamePaused()) {
+        usleep(1000000); 
+        keyboard.PressSpace();
+    }
 }
 PvZ::~PvZ() {
     memory.Detach();
@@ -339,7 +346,7 @@ int PvZ::GetSlotTotalCD(int num) {
     return ReadMemory<int>(slotOffset + 0x50 + (num - 1) * 0x50);
 }
 
-void RunInThread(void (*func)()) {
+void RuningInThread(void (*func)()) {
     std::thread th(func);
     th.detach();
 }

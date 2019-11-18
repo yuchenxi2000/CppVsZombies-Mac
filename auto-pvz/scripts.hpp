@@ -34,6 +34,6 @@ void me_10();
 /*
  * 纯爷们十六炮
  */
-void pe_16();
+void pe_16(bool bungee);
 
 #endif /* scripts_hpp */

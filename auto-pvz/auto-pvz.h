@@ -5,11 +5,10 @@
  * 为了适配pvzscript, cvz的接口
  * 给函数设置了多个名称
  *
- * 函数基本和lmintlcx的python框架一致
- * （当然一些功能未实现）
+ * 函数基本和lmintlcx的python框架一致，一些功能暂未实现。
  *
- * 两个函数同时使用（指之间无Prejudge延时）时，鼠标指针不会指向原来的位置。
- * 因为macOS的鼠标点击事件会自动调用位置移动的callback。。我也很无奈
+ * 两个函数同时使用（指之间无Prejudge,Delay等延时）时，鼠标指针不会指向原来的位置。
+ * 就算是特性吧。。
  */
 /*
  * 该函数实现垫材等功能
@@ -18,7 +17,7 @@
  *
  * 以及需要与发炮操作不干扰的操作（结尾冰杀小偷等）
  */
-void RunInThread(void (*func)());
+void RuningInThread(void (*func)());
 /*
  * 存冰
  * 示例：
@@ -100,8 +99,17 @@ void AutoFillIce(std::initializer_list<Coord> ls);
 #define StartStopDancerThread dancer.Start
 #define CancelStopDancerThread dancer.Pause
 /*
- * 暂停时有没有GUI（防挡视线）
+ * 窗口前置
  */
-#define PauseNoGui dancer.nogui
+#define WindowFront pvz.WindowFront
+/*
+ * 按空格停止游戏/继续游戏
+ */
+#define PressSpace keyboard.PressSpace
+/*
+ * 强制停止游戏/继续游戏
+ * 注意，这个函数如果和女仆秘籍同时使用的话会出错！
+ */
+#define PauseGame pvz.PauseGame
 
 #endif /* auto_pvz_h */

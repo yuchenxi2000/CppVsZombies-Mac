@@ -90,11 +90,14 @@ public:
     int GetSlotCD(int num); // 0x4C
     int GetSlotTotalCD(int num); // 0x50
     
+    // zombie refresh
     int refresh_point;
     void UntilCountDown(int cs, bool isHugeWave);
 public:
     PvZ();
     ~PvZ();
+    // 窗口前置
+    void WindowFront();
     // 简单地睡眠cs厘秒
     void Sleep(int cs);
     // 等到相对特定波cs厘秒到位置
@@ -171,7 +174,6 @@ class PvZDancer {
     pthread_t handle;
     bool running;
 public:
-    bool nogui; // 放挡视线
     uint32_t addr;
     PvZDancer();
     ~PvZDancer();

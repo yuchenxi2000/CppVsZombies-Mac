@@ -2,18 +2,18 @@
 void pe_12() {
     for (int i = 1; i <= 20; ++i) {
         if (i == 20) {
-            WaitUntil(-200, i);
+            Prejudge(-200, i);
             DelayedFire({4,7}, 30);
         }
-        WaitUntil(-100, i);
-        Fire({{2,9}, {5,9}});
+        Prejudge(-90, i);
+        Pao({{2,9}, {5,9}});
         if (i == 10) {
-            Wait(373);
+            Until(373-90-100);
             Card("ytzd", {2,9});
         }
     }
-    WaitUntil(300, 20);
-    Fire({{2,9}, {5,9}});
+    Until(300);
+    Pao({{2,9}, {5,9}});
 }
 
 void pe_24() {
@@ -259,7 +259,7 @@ void me_10() {
         Pao({{2,9}, {4,9}});
     }
 }
-void pe_16() {
+void pe_16(bool bungee) {
     for (int i = 1; i <= 20; ++i) {
         if (i == 20) {
             Prejudge(-150-30, i);
@@ -267,6 +267,7 @@ void pe_16() {
             Wait(90);
             Fire({{2,9},{2,9},{5,9},{5,9}});
             // 冰杀小偷
+            if (!bungee) return;
             Until(200);
             Card("hbg", {1,7});
             Card("kfd", {1,7});
@@ -278,7 +279,7 @@ void pe_16() {
         }else {
             Pao({{2,9},{5,9}});
         }
-        if (i == 10) {
+        if (i == 10 && bungee) {
             // 冰杀小偷
             Until(200);
             Card("hbg", {1,7});
