@@ -2,7 +2,7 @@
 
 Plants vs. Zombies v1.0.40 (Mac) 简易键控框架
 
-函数基本上和 lmintlcx 的 python 框架一致，有一些功能暂未实现
+函数基本上和 lmintlcx 的 python 框架一致
 
 适用系统 macOS < 10.15（PvZ都玩不了键控个啥呦）
 
