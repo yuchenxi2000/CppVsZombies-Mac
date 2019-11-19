@@ -222,7 +222,7 @@ void pe_4() {
                 }else if (wave == 13) {
                     row = 4;
                     col = 8;
-                }else if (wave == 17) {
+                }else { // wave == 17
                     row = 4;
                     col = 9;
                 }

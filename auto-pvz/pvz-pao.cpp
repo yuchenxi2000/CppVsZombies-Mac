@@ -22,13 +22,52 @@ void PvZCannon::GetCannonOnLawn() {
     }
 }
 
+void PvZCannon::GetCannonFromList(std::initializer_list<Coord> ls) {
+    int total = pvz.PlantsMaxCount();
+    for (const auto & cob : ls) {
+        bool cannon_found = false;
+        for (int i = 0; i < total; ++i) {
+            if (pvz.GetPlantID(i) == 47 && pvz.PlantAlive(i) && cob.col == pvz.GetPlantCol(i) && cob.row == pvz.GetPlantRow(i)) {
+                Cannon cannon;
+                cannon.position = cob;
+                cannon.index = i;
+                cannonlist.push_back(cannon);
+                cannon_found = true;
+                break;
+            }
+        }
+        if (!cannon_found) {
+            printf("cannon not exist: row %f col %f\n", cob.row, cob.col);
+            exit(666);
+        }
+    }
+}
+
+void PvZCannon::UpdatePaoList() {
+    curindex = 0;
+    cannonlist.clear();
+    GetCannonOnLawn();
+}
+
+void PvZCannon::UpdatePaoList(std::initializer_list<Coord> ls) {
+    curindex = 0;
+    cannonlist.clear();
+    if (ls.size() > 0) {
+        GetCannonFromList(ls);
+    }
+}
+
+void PvZCannon::SkipPao(int num) {
+    curindex += num;
+    curindex %= cannonlist.size();
+}
+
 void PvZCannon::DelayedFire(const Coord & firepos, int cs) {
     std::lock_guard<std::mutex> lkg(mouse_lock);
-    
-    int i = 0;
-    int cobs = cannonlist.size();
-    while (i < cobs) {
-        const Cannon & cannon = cannonlist[i];
+    int previndex = curindex;
+    int cobs = (int)cannonlist.size();
+    while (true) {
+        const Cannon & cannon = cannonlist[curindex];
         if (!pvz.PlantAlive(cannon.index)) {
             std::cout << "Oops! your cannon died!" << std::endl;
             std::cout << "I'd better run away..." << std::endl;
@@ -37,9 +76,14 @@ void PvZCannon::DelayedFire(const Coord & firepos, int cs) {
         if (pvz.GetCannonState(cannon.index) == cob_ready) {
             operation.safeDelayedFireCob(cannon.position, firepos, cs * 10000);
             return;
-        }else {
-            ++i;
-            continue;
+        }
+        
+        ++curindex;
+        if (curindex >= cobs) {
+            curindex = 0;
+        }
+        if (curindex >= previndex) {
+            break;
         }
     }
 }
@@ -47,34 +91,40 @@ void PvZCannon::DelayedFire(const Coord & firepos, int cs) {
 void PvZCannon::Fire(std::initializer_list<Coord> firepos) {
     std::lock_guard<std::mutex> lkg(mouse_lock);
     SafeClick safeclick;
-    int i = 0;
-    int cobs = cannonlist.size();
+    int previndex = curindex;
+    int cobs = (int)cannonlist.size();
     int firecnt = 0;
-    for (const Coord & pos : firepos) {
-        while (i < cobs) {
-            const Cannon & cannon = cannonlist[i];
-            if (!pvz.PlantAlive(cannon.index)) {
-                std::cout << "Oops! your cannon died!" << std::endl;
-                std::cout << "I'd better run away..." << std::endl;
-                exit(233);
-            }
-            if (pvz.GetCannonState(cannon.index) == cob_ready) {
-                ++firecnt;
-                CGPoint point;
-                point.x = windowPos.x;
-                point.y = windowPos.y;
-                Mouse::rightClickCoord(point);
-                operation.fireCob(cannon.position, pos);
-                Mouse::rightClickCoord(point);
-                ++i;
+    std::initializer_list<Coord>::iterator pos = firepos.begin();
+    while (true) {
+        const Cannon & cannon = cannonlist[curindex];
+        if (!pvz.PlantAlive(cannon.index)) {
+            std::cout << "Oops! your cannon died!" << std::endl;
+            std::cout << "I'd better run away..." << std::endl;
+            exit(233);
+        }
+        if (pvz.GetCannonState(cannon.index) == cob_ready) {
+            if (pos == firepos.end()) {
                 break;
-            }else {
-                ++i;
-                continue;
             }
+            CGPoint point;
+            point.x = windowPos.x;
+            point.y = windowPos.y;
+            Mouse::rightClickCoord(point);
+            operation.fireCob(cannon.position, *pos);
+            Mouse::rightClickCoord(point);
+            ++pos;
+            ++firecnt;
+        }
+        
+        ++curindex;
+        if (curindex >= cobs) {
+            curindex = 0;
+        }
+        if (curindex == previndex) {
+            break;
         }
     }
-    int left = firepos.size() - firecnt;
+    int left = (int)firepos.size() - firecnt;
     if (left > 0) {
         std::cout << "What? " << left << " cannon(s) should be ready..." << std::endl;
     }

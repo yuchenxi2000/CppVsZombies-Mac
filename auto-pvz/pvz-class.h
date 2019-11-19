@@ -115,10 +115,17 @@ public:
 
 class PvZCannon {
     void GetCannonOnLawn();
+    void GetCannonFromList(std::initializer_list<Coord> ls);
     std::vector<Cannon> cannonlist;
+    int curindex;
 public:
     PvZCannon();
     ~PvZCannon();
+    // 更新炮列表
+    void UpdatePaoList();
+    void UpdatePaoList(std::initializer_list<Coord> ls);
+    // 跳过炮列表中一门炮
+    void SkipPao(int num);
     // 手动发炮
     void Fire(const Coord & cob, const Coord & firepos);
     // 程序自动找炮发射
