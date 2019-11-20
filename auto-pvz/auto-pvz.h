@@ -13,9 +13,9 @@
 /*
  * 该函数实现垫材等功能，以及需要与发炮操作不干扰的操作（结尾冰杀小偷等）
  * 把种植、延迟铲除写在一个函数void DianCai();里
- * 然后使用时RunInThread(DianCai);
+ * 然后使用时RunningInThread(DianCai);
  */
-void RuningInThread(void (*func)());
+void RunningInThread(void (*func)());
 /*
  * 存冰
  * 示例：
@@ -42,6 +42,12 @@ void AutoFillIce(std::initializer_list<Coord> ls);
 #define Until pvz.Until
 #define Wait pvz.Wait
 #define Delay Wait
+/*
+ * 等到游戏结束
+ * 如果有其他线程运行而主线程退出会导致其他线程一并退出。
+ * 改函数防止主线程提前退出导致操作未执行
+ */
+#define WaitUntilEnd pvz.WaitUntilEnd
 /*
  * 需要指定卡槽位置的用卡
  * 示例：

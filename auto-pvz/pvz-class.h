@@ -107,6 +107,8 @@ public:
     void Wait(int cs);
     // 等到距本波刷新点cs位置
     void Until(int cs);
+    // 等到游戏结束
+    void WaitUntilEnd();
     // 手动种植物
     void PlantSeed(int slot, const Coord & pos);
     // 铲植物

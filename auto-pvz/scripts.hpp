@@ -2,7 +2,7 @@
 #define scripts_hpp
 #include "auto-pvz.h"
 /*
- * lmintlcx 的二十四炮、白昼前置八炮、四炮
+ * lmintlcx 的二十四炮、白昼前置八炮、四炮、半场十二炮
  * 其余本人写的
  */
 /*
@@ -35,5 +35,9 @@ void me_10();
  * 纯爷们十六炮
  */
 void pe_16(bool bungee);
+/*
+ * 半场十二炮
+ */
+void pe_half_12();
 
 #endif /* scripts_hpp */

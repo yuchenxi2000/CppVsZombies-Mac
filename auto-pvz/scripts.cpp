@@ -287,3 +287,110 @@ void pe_16(bool bungee) {
         }
     }
 }
+
+void DianCai() {
+    Card("xpg", {1, 9});
+    Card("ygg", {2, 9});
+    Delay(100);
+    Shovel({1, 9});
+    Shovel({2, 9});
+}
+
+void Flame() {
+    while (pvz.CurrentWave() < 10) {
+        Sleep(1);
+    }
+    Delay(400);
+    Card("hy", {4, 9});
+    Card("hblj", {4, 9});
+    Delay(100 + 1);
+    Shovel({4, 9});
+    while (pvz.CurrentWave() < 20) {
+        Sleep(1);
+    }
+    Delay(400);
+    Card("hy", {4, 9});
+    Card("hblj", {4, 9});
+    Delay(100 + 1);
+    Shovel({4, 9});
+}
+
+void pe_half_12() {
+//            SelectCards(["白冰", "冰菇", "咖啡", "荷叶", "南瓜", "樱桃", "辣椒", "倭瓜", "阳光", "小喷"])
+    UpdatePaoList({
+        {1, 3}, {2, 3}, {3, 3},
+        {1, 5}, {2, 5}, {3, 5},
+        {1, 7}, {2, 7}, {3, 7},
+        {1, 1}, {2, 1}, {3, 1},
+    });
+    Card("hbg", {5, 5});  // 临时存冰
+    Card("hy", {3, 9});  // 临时存冰位
+    Card("ngt", {3, 9});  // 其实不需要
+    StartAutoFillIceThread({{4, 5}, {4, 6}, {4, 7}, {4, 8}, {3, 9}});
+    RunningInThread(Flame);
+    for (int wave = 1; wave <= 20; ++wave) {
+        printf("wave: %d\n", wave);
+        Prejudge(-200, wave);
+        if (wave == 1 || wave == 10) {
+            Until(-95);
+            Pao({{1, 9}});
+            Until(-15);
+            Pao({{2, 9}, {5, 9}});
+            Until(-15 + 110);
+            Pao({{5, 7.7}});
+            Until(-15 + 110 + 373 - 100); // 368
+            Card("ytzd", {1, 9});
+        }else if (wave == 20) {
+            Until(-150 - 30);
+            DelayedPao({4, 7}, 30);
+            Until(-60); // 等到刷新前 60cs
+            Pao({{2, 9}, {5, 9}, {2, 9}, {5, 9}});
+            Until(-60 + 110);
+            Pao({{1, 8.8}, {2, 8.8}}); // 炮不够 ==
+            Until(-60 + 110 + 373 - 100);
+            Card("ytzd", {5, 9});
+            // 收尾
+        }else {
+            Until(-133);
+            Pao({{1, 8.0}}); // 拦截上波红眼, 分离部分快速僵尸
+            Until(360 - 373);
+            Pao({{2, 8.15}}); // "无冰分离."  ----发出日智的声音
+            Until(360 - 298); // 360cs 反应冰
+            if (wave != 2) {
+                Coffee();
+            }else {
+                Card("kfd", {{5, 5}});
+            }
+            Until(360 + 500 - 373);
+            if (wave != 2 && wave != 11) {
+                Pao({{5,3}}); // 下半场尾炸
+            }
+            Until(1800 - 200 - 373);
+            Pao({{2, 9}, {5, 8.1}}); // 激活炸
+            Delay(10);
+            RunningInThread(DianCai); // 垫撑杆
+            Until(1800 - 200 - 373 + 220);
+            Pao({{1, 8.2}}); // 秒白眼, 触发红眼投掷
+            if (wave == 9 || wave == 19){ // 收尾波次
+                Until(1800 - 133);
+                Pao({{1, 8.0}});
+                Until(1800 + 360 - 373);
+                Pao({{2, 9}});
+                Until(1800 + 360 + 500 - 373);
+                Pao({{5, 2.5}});
+                Until(1800 + 1800 - 200 - 373);
+                Pao({{5, 6}});
+                Delay(110);
+                Pao({{5, 6}});
+                Delay(110);
+                Pao({{5, 3}});
+                Until(4500 - 200 - 373);
+                Pao({{5, 5}});
+                if (wave == 9) {
+                    SkipPao(2); // 中场调整
+                }
+            }
+        }
+    }
+    WaitUntilEnd();
+}

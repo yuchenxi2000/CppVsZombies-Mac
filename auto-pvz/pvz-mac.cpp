@@ -108,8 +108,10 @@ PvZ::PvZ() {
     WindowFront();
     // 取消暂停
     if (pvz.GamePaused()) {
-        usleep(1000000); 
-        keyboard.PressSpace();
+        usleep(1000000);
+        if (pvz.GamePaused()) {
+            keyboard.PressSpace();
+        }
     }
 }
 PvZ::~PvZ() {
@@ -272,6 +274,12 @@ void PvZ::Until(int cs) {
     }
 }
 
+void PvZ::WaitUntilEnd() {
+    while (CurGameUI() == 3) {
+        usleep(100000); // 0.1 s
+    }
+}
+
 void PvZ::PlantSeed(int slot, const Coord & pos) {
     std::lock_guard<std::mutex> lkg(mouse_lock);
     operation.safePlantSeed(slot, pos);
@@ -346,7 +354,7 @@ int PvZ::GetSlotTotalCD(int num) {
     return ReadMemory<int>(slotOffset + 0x50 + (num - 1) * 0x50);
 }
 
-void RuningInThread(void (*func)()) {
+void RunningInThread(void (*func)()) {
     std::thread th(func);
     th.detach();
 }
