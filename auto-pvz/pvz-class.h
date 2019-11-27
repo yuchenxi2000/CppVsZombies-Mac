@@ -134,6 +134,8 @@ public:
     void Fire(std::initializer_list<Coord> firepos);
     // 程序自动找炮发射，延迟cs点炮
     void DelayedFire(const Coord & firepos, int cs);
+    // 该函数确保两次点击像素间隔100以上，从而确保落点在炮附近时能正常发射
+    void SmartFire(std::initializer_list<Coord> firepos);
 };
 
 void AutoFillIce(std::initializer_list<Coord> ls);

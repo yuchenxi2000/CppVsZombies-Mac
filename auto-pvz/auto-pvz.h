@@ -48,6 +48,7 @@ void AutoFillIce(std::initializer_list<Coord> ls);
  * 改函数防止主线程提前退出导致操作未执行
  */
 #define WaitUntilEnd pvz.WaitUntilEnd
+#define WaitGameEnd WaitUntilEnd
 /*
  * 需要指定卡槽位置的用卡
  * 示例：
@@ -81,16 +82,22 @@ void AutoFillIce(std::initializer_list<Coord> ls);
 /*
  * 发炮
  *
- * 如果出现炮落点在自身附近无法快速发炮请使用 DelayedPao
- *
  * 示例：
  * Pao({{2,9}});
  * Pao({{2,9}, {5,9}});
  *
- * Pao 函数调用必须有间隔（之间有 Sleep, Delay, Prejudge）。
- * 如果 Pao 连续无间隔两次调用会导致无法发射。
- * 如果要同时发射两门炮，请这样写：
- * Pao({{2,9}, {5,9}});
+ * 如果发现少发了一门，大多数情况是程序自动选择的炮在落点附近。
+ *
+ * 如果出现炮落点在自身附近无法快速发炮有以下解决方法：
+ * 1. 调整炮序（使用UpdatePaoList）。不用落点附近的炮不就行了。缺点：调整炮序费一点脑子。
+ * 2. 使用 DelayedPao。缺点是，函数有内部延时，无法一次发射多门炮，而且需要手动调整时序
+ * 3. 使用 SmartPao。缺点是，在极特殊的情况下（详见SmartPao）程序无法通过调整点炮点实现发炮。
+ *
+ * （解释一下原因：当炮落点和鼠标点炮点相隔100像素之内时无法快速发炮）
+ * （泳池场景当炮的落点在炮后轮时，使用该炮或者该炮上面一格、下面一格的炮会导致无法发炮。）
+ * （白天场景当炮的落点在炮后轮时，使用该炮会导致无法发炮。）
+ * （如，无法使用位于{3,7}, {4,7}, {5,7}处的炮炮击{4,7}）
+ * （这是PvZ游戏代码实现的锅。。）
  *
  * 目前为止还没有发现“上界之风”现象，1.0.40版屋顶炮基本准确
  * 所以不会有 RoofPao。
@@ -98,11 +105,26 @@ void AutoFillIce(std::initializer_list<Coord> ls);
 #define Fire cannon.Fire
 #define Pao Fire
 #define TryPao Pao
+/*
+ * 该函数确保两次点击像素间隔100以上，从而确保落点在炮附近时能正常发射
+ *
+ * 不过，当特殊情况，即只有一个炮填装完毕，且炮落点在炮中央附近时（炮身20-100像素），
+ * 这时无论怎么调整点炮点都没法保证两次点击像素间隔100以上，所以无法发射。
+ *
+ * 该函数只适用于非屋顶场景，因为屋顶是斜的，太难写了。。。
+ */
+#define SmartPao cannon.SmartFire
+/*
+ * 延迟一段时间点炮（左键炮身->延迟一段时间->左键落点）
+ */
 #define DelayedFire cannon.DelayedFire
 #define DelayedPao DelayedFire
 /*
  * 铲植物
  * Shovel({1, 7});
+ *
+ * 铲南瓜请修改行数。
+ * 比如，{2, 2} 有南瓜和豌豆，我想只铲南瓜，则 Shovel({2.1, 2});
  */
 #define Shovel pvz.Shovel
 /*

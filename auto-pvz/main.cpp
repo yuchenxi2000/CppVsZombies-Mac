@@ -3,11 +3,12 @@
 /*
  * PvZ 键控框架 by Chenxi Yu (GitHub yuchenxi2000, bilibili yuchenxi0_0)
  * 游戏版本PvZ Mac v1.0.40
+ * 这个框架还在完善中，很可能有bug，欢迎反馈
  *
  * 建议在选卡界面或战斗界面运行。
  * 键控程序启动后不能移动窗口，窗口不能被遮挡。
  * （因为macOS貌似不能把鼠标事件传给一个特定的进程，
- * CGEventPostToPSN, CGEventPostToPid 居然都没有用。。
+ * CGEventPostToPSN, CGEventPostToPid 居然都没有用。。网上说这函数不能发送鼠标事件。。
  * 所以鼠标事件是全局鼠标事件，运行时请小心谨慎！）
  *
  * 为键控精度，读取内存决定发炮时机，所以请以root权限运行。

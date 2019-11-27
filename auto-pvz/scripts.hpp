@@ -39,5 +39,9 @@ void pe_16(bool bungee);
  * 半场十二炮
  */
 void pe_half_12();
+/*
+ * 双冰十六炮
+ */
+void pe_16_ice();
 
 #endif /* scripts_hpp */

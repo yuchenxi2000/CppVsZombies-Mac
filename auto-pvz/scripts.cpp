@@ -394,3 +394,67 @@ void pe_half_12() {
     }
     WaitUntilEnd();
 }
+
+void pe_16_ice() {
+    UpdatePaoList({
+        {1,1}, {2,1}, {5,1}, {6,1},
+        {1,5}, {2,5}, {3,5}, {4,5}, {5,5}, {6,5},
+        {1,7}, {2,7}, {3,7}, {4,7}, {5,7}, {6,7}
+    });
+    StartAutoFillIceThread({{3,1}, {3,2}, {3,3}, {3,4}});
+    for (int wave = 1; wave <= 9; ++wave) {
+        if (wave % 2 == 1) {
+            Prejudge(-95, wave);
+            Pao({{2, 9}, {5, 9}});
+            Delay(108);
+            Pao({{1, 9}, {5, 9}});
+            Until(601 + 20 - 298); // 20cs 预判冰
+            Coffee();
+        }else {
+            Prejudge(-95, wave);
+            Pao({{2, 9}, {5, 9}});
+            Until(1201-200-373);
+            Pao({{2, 9}, {5, 9}});
+        }
+    }
+    // 9波收尾
+    Delay(183);
+    Pao({{2, 9}, {5, 9}});
+    Delay(1201-200-373+95+500);
+    Pao({{2, 9}, {5, 9}});
+    for (int wave = 10; wave <= 19; ++wave) {
+        if (wave % 2 == 0) {
+            Prejudge(-95, wave);
+            Pao({{2, 9}, {5, 9}});
+            Delay(108);
+            Pao({{1, 9}, {5, 9}});
+            
+            Until(601 + 20 - 298); // 20cs 预判冰
+            Coffee();
+        }else {
+            Prejudge(-95, wave);
+            Pao({{2, 9}, {5, 9}});
+            Until(1201-200-373);
+            Pao({{2, 9}, {5, 9}});
+            if (wave == 19) {
+                Delay(200+373+1-95);
+                Pao({{2, 9}, {5, 9}});
+                Delay(400);
+                Pao({{2, 9}, {5, 9}});
+                Delay(500);
+                Pao({{2, 9}, {5, 9}});
+            }
+        }
+    }
+    Prejudge(-200, 20);
+    DelayedPao({4,7}, 30);
+    Prejudge(-95, 20);
+    Pao({{2, 9}, {5, 9}});
+    Delay(108);
+    Pao({{1, 9}, {5, 9}});
+    Until(601 + 20 - 298); // 20cs 预判冰
+    Coffee();
+    Delay(183);
+    Pao({{2, 9}, {5, 9}});
+    std::cout << "20波手动收尾" << std::endl;
+}
