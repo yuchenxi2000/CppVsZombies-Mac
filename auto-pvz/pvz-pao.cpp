@@ -66,7 +66,6 @@ void PvZCannon::DelayedFire(const Coord & firepos, int cs) {
     std::lock_guard<std::mutex> lkg(mouse_lock);
     int previndex = curindex;
     int cobs = (int)cannonlist.size();
-    printf("%d\n", cobs);
     while (true) {
         const Cannon & cannon = cannonlist[curindex];
         if (!pvz.PlantAlive(cannon.index)) {

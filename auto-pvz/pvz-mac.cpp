@@ -103,7 +103,10 @@ PvZ::PvZ() {
     }
     plantOffset = ReadMemory<uint32_t>(base, 0x780, 0xA0);
     slotOffset = ReadMemory<uint32_t>(base, 0x780, 0x138);
+    itemOffset = ReadMemory<uint32_t>(base, 0x780, 0xD8);
+    mouseOffset = ReadMemory<uint32_t>(base, 0x780, 0x12C);
     std::cout << "game start!" << std::endl;
+    
     // 窗口前置
     WindowFront();
     // 取消暂停
@@ -117,26 +120,6 @@ PvZ::PvZ() {
 PvZ::~PvZ() {
     memory.Detach();
     std::cout << "done. exit" << std::endl;
-}
-
-template<typename T, typename... Args>
-T PvZ::ReadMemory(Args... address) {
-    return memory.ReadMemory<T>({static_cast<uintptr_t>(address)...});
-}
-
-template<typename T, size_t size, typename... Args>
-std::array<T, size> PvZ::ReadMemory(Args... address) {
-    return memory.ReadMemory<T, size>({static_cast<uintptr_t>(address)...});
-}
-
-template<typename T, typename... Args>
-void PvZ::WriteMemory(T value, Args... address) {
-    memory.WriteMemory<T>(value, {static_cast<uintptr_t>(address)...});
-}
-
-template<typename T, size_t size, typename... Args>
-void PvZ::WriteMemory(std::array<T, size> value, Args... address) {
-    memory.WriteMemory<T, size>(value, {static_cast<uintptr_t>(address)...});
 }
 
 void PvZ::WriteMemory(std::initializer_list<byte> il, uintptr_t address) {
@@ -352,6 +335,54 @@ int PvZ::GetSlotCD(int num) {
 
 int PvZ::GetSlotTotalCD(int num) {
     return ReadMemory<int>(slotOffset + 0x50 + (num - 1) * 0x50);
+}
+
+int PvZ::ItemCount() {
+    return pvz.ReadMemory<uint32_t>(pvz.base, 0x780, 0xE8);
+}
+
+int PvZ::ItemMaxCount() {
+    return pvz.ReadMemory<uint32_t>(pvz.base, 0x780, 0xDC);
+}
+
+bool PvZ::ItemDisappeared(int index) {
+    return pvz.ReadMemory<bool>(itemOffset + 0x38 + 0xB4 * index);
+}
+
+bool PvZ::ItemCollected(int index) {
+    return pvz.ReadMemory<bool>(itemOffset + 0x50 + 0xB4 * index);
+}
+
+float PvZ::GetItemX(int index) {
+    return pvz.ReadMemory<float>(itemOffset + 0x24 + 0xB4 * index);
+}
+
+float PvZ::GetItemY(int index) {
+    return pvz.ReadMemory<float>(itemOffset + 0x28 + 0xB4 * index);
+}
+
+int PvZ::CursorX() {
+    return ReadMemory<int>(mouseOffset + 0x8);
+}
+
+int PvZ::CursorY() {
+    return ReadMemory<int>(mouseOffset + 0xC);
+}
+
+int PvZ::CursorInWindow() {
+    return ReadMemory<int>(mouseOffset + 0x18);
+}
+
+int PvZ::SelectedSlot() {
+    return ReadMemory<int>(mouseOffset + 0x24);
+}
+
+int PvZ::SelectedCardID() {
+    return ReadMemory<int>(mouseOffset + 0x28);
+}
+
+int PvZ::SelectType() { // 0: none, 1:card, 6: shovel, 8: cannon
+    return ReadMemory<int>(mouseOffset + 0x30);
 }
 
 void RunningInThread(void (*func)()) {

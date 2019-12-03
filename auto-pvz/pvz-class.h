@@ -58,6 +58,8 @@ public:
     const uint32_t base = 0x35EE64;
     uint32_t plantOffset;
     uint32_t slotOffset;
+    uint32_t itemOffset;
+    uint32_t mouseOffset;
     Memory memory;
 public:
     // game, internal timer
@@ -90,6 +92,22 @@ public:
     int GetSlotCD(int num); // 0x4C
     int GetSlotTotalCD(int num); // 0x50
     
+    // item
+    int ItemCount();
+    int ItemMaxCount();
+    bool ItemDisappeared(int index);
+    bool ItemCollected(int index);
+    float GetItemX(int index);
+    float GetItemY(int index);
+    
+    // mouse
+    int CursorX();
+    int CursorY();
+    int CursorInWindow();
+    int SelectedSlot();
+    int SelectedCardID();
+    int SelectType();
+    
     // zombie refresh
     int refresh_point;
     void UntilCountDown(int cs, bool isHugeWave);
@@ -114,6 +132,26 @@ public:
     // 铲植物
     void Shovel(const Coord & plant);
 };
+
+template<typename T, typename... Args>
+T PvZ::ReadMemory(Args... address) {
+    return memory.ReadMemory<T>({static_cast<uintptr_t>(address)...});
+}
+
+template<typename T, size_t size, typename... Args>
+std::array<T, size> PvZ::ReadMemory(Args... address) {
+    return memory.ReadMemory<T, size>({static_cast<uintptr_t>(address)...});
+}
+
+template<typename T, typename... Args>
+void PvZ::WriteMemory(T value, Args... address) {
+    memory.WriteMemory<T>(value, {static_cast<uintptr_t>(address)...});
+}
+
+template<typename T, size_t size, typename... Args>
+void PvZ::WriteMemory(std::array<T, size> value, Args... address) {
+    memory.WriteMemory<T, size>(value, {static_cast<uintptr_t>(address)...});
+}
 
 class PvZCannon {
     void GetCannonOnLawn();
@@ -191,6 +229,9 @@ public:
     void Start();
     void Pause();
 };
+
+void RunningInThread(void (*func)());
+void StartAutoCollectThread();
 
 extern std::string seed_name[11][8];
 extern KeyBoard keyboard;

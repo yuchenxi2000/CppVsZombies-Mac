@@ -33,6 +33,8 @@ int main(int argc, const char * argv[]) {
         {5,1}, {5,3}, {5,5}, {5,7},
         {6,1}, {6,3}, {6,5}, {6,7},
     });
+    // 自动收集
+    StartAutoCollectThread();
     // 二十四炮键控脚本
     pe_24();
     return 0;

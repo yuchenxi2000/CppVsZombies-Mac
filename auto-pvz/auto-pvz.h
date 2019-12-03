@@ -27,6 +27,10 @@ void AutoFillIce(std::initializer_list<Coord> ls);
 #define StartAutoFillIceThread AutoFillIce
 #define Coffee pvzice.Coffee
 /*
+ * 自动收集
+ */
+void StartAutoCollectThread();
+/*
  * 精确计时，与游戏内部时钟有关
  * Prejude = WaitUntil = 等待直至与设定波次刷新时间点的差值达到指定值
  * Until = 等待直至当前时间戳与本波刷新时间点的差值达到指定值

@@ -56,7 +56,7 @@ void PvZIce::SetIcePos(std::initializer_list<Coord> ls) {
     }
 }
 
-int ice_precision = 1000000;
+int ice_precision = 100000;
 
 void _AutoFillIce() {
     // coffee->ice : 298
@@ -70,6 +70,9 @@ void _AutoFillIce() {
                 for (Ice & ice : pvzice.icePos) {
                     ice.gridinfo = GetGridInfo(ice.position);
                     if (ice.gridinfo == CANPLANTICE) {
+                        while (!pvz.CursorInWindow()) {
+                            usleep(ice_precision);
+                        }
                         pvz.PlantSeed(slot, ice.position);
                     }
                 }
