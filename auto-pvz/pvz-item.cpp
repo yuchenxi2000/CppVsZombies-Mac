@@ -11,7 +11,7 @@ void _autoCollect() {
         int item_on_lawn = pvz.ItemCount();
         
         while (item_on_lawn == 0) {
-            pvz.Wait(collect_interval*2);
+            pvz.Wait(collect_interval);
             item_on_lawn = pvz.ItemCount();
         }
         for (int index = 0; index < item_max && item_collected < item_on_lawn; ++index) {
@@ -20,15 +20,17 @@ void _autoCollect() {
             if (!pvz.ItemDisappeared(index) && !pvz.ItemCollected(index)) {
                 float x = pvz.GetItemX(index);
                 float y = pvz.GetItemY(index);
-                if (x < 0 || y < 70) {
+                if (x < 0 || y < 70 || x > 799-30 || y > 599-30) {
                     continue;
                 }
                 item_collected++;
-                std::lock_guard<std::mutex> lkd(mouse_lock);
-                SafeClick safeclick;
-                Mouse::clickCoord(CGPointMake(x+windowPos.x+30, y+windowPos.y+30));
+                {
+                    std::lock_guard<std::mutex> lkd(mouse_lock);
+                    SafeClick safeclick;
+                    Mouse::clickCoord(CGPointMake(x+windowPos.x+30, y+windowPos.y+30));
+                }
+                pvz.Wait(collect_interval);
             }
-            pvz.Wait(collect_interval);
         }
         
     }

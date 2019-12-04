@@ -6,7 +6,9 @@
  * 这个框架还在完善中，很可能有bug，欢迎反馈
  *
  * 建议在选卡界面或战斗界面运行。
- * 键控程序启动后不能移动窗口，窗口不能被遮挡。
+ * 键控程序启动后不能移动窗口，窗口不能被遮挡！
+ * 键控程序启动后不能移动窗口，窗口不能被遮挡！
+ * 键控程序启动后不能移动窗口，窗口不能被遮挡！
  * （因为macOS貌似不能把鼠标事件传给一个特定的进程，
  * CGEventPostToPSN, CGEventPostToPid 居然都没有用。。网上说这函数不能发送鼠标事件。。
  * 所以鼠标事件是全局鼠标事件，运行时请小心谨慎！）
@@ -20,7 +22,7 @@
  *
  * 植物缩写见 pvz-global.cpp
  *
- * 改出怪、修改阳光、自动收集请配合Mac版修改器使用。
+ * 改出怪请配合Mac版修改器使用。
  * Mac版修改器：https://github.com/zhoury18/PvZHelper-Mac
  */
 int main(int argc, const char * argv[]) {
@@ -37,5 +39,7 @@ int main(int argc, const char * argv[]) {
     StartAutoCollectThread();
     // 二十四炮键控脚本
     pe_24();
+    // 等退出战斗界面
+    WaitGameEnd();
     return 0;
 }

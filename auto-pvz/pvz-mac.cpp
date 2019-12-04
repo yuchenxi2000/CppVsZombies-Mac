@@ -139,6 +139,13 @@ int PvZ::CurGameUI() {
     return ReadMemory<int>(base, 0x7C4);
 }
 
+int PvZ::CurGameMode() {
+    int gameui = CurGameUI();
+    if (gameui == 2 || gameui == 3)
+        return ReadMemory<int>(base, 0x7C0);
+    else return 0;
+}
+
 int PvZ::CurGameTime() {
     return ReadMemory<int>(base, 0x780, 0x5560);
 }
@@ -383,6 +390,45 @@ int PvZ::SelectedCardID() {
 
 int PvZ::SelectType() { // 0: none, 1:card, 6: shovel, 8: cannon
     return ReadMemory<int>(mouseOffset + 0x30);
+}
+
+// cheat
+void PvZ::NoFog(bool on) {
+    if (on)
+        WriteMemory({0x90, 0x90}, 0x1086B);
+    else
+        WriteMemory({0x74, 0x09}, 0x1086B);
+}
+
+void PvZ::ModifyEndlessLevel(int level) {
+    int gameui = CurGameUI();
+    if (gameui == 60 || gameui == 70 || (gameui >= 11 && gameui <= 15))
+        WriteMemory<int>(level, base, 0x780, 0x154, 0x6C);
+}
+
+void PvZ::ModifySun(int sun) {
+    WriteMemory<int>(sun, base, 0x780, 0x5554);
+}
+
+void PvZ::ModifyMoney(int money) {
+    WriteMemory<int>(money, base, 0x7F4, 0x38);
+}
+
+void PvZ::LockSun(bool on) {
+    if (on) {
+        WriteMemory({0x90, 0x90, 0x90, 0x90, 0x90, 0x90}, 0x1C72F);
+        WriteMemory({0x90, 0x90, 0x90, 0x90, 0x90, 0x90}, 0x18E8F);
+    } else {
+        WriteMemory({0x89, 0x90, 0x54, 0x55, 0x00, 0x00}, 0x1C72F);
+        WriteMemory({0x89, 0x90, 0x54, 0x55, 0x00, 0x00}, 0x18E8F);
+    }
+}
+
+void PvZ::LockMoney(bool on) {
+    if (on)
+        WriteMemory({0x90, 0x90, 0x90}, 0x43148);
+    else
+        WriteMemory({0x89, 0x50, 0x38}, 0x43148);
 }
 
 void RunningInThread(void (*func)()) {

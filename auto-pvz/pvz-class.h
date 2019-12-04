@@ -66,6 +66,7 @@ public:
     bool GamePaused();
     void PauseGame(bool);
     int CurGameUI();
+    int CurGameMode();
     int CurGameTime();
     int CurrentWave();
     int PlantsCount();
@@ -107,6 +108,14 @@ public:
     int SelectedSlot();
     int SelectedCardID();
     int SelectType();
+    
+    // cheat
+    void NoFog(bool on);
+    void ModifyEndlessLevel(int level);
+    void ModifySun(int sun);
+    void ModifyMoney(int money);
+    void LockSun(bool on);
+    void LockMoney(bool on);
     
     // zombie refresh
     int refresh_point;

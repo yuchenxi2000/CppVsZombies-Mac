@@ -70,7 +70,7 @@ void _AutoFillIce() {
                 for (Ice & ice : pvzice.icePos) {
                     ice.gridinfo = GetGridInfo(ice.position);
                     if (ice.gridinfo == CANPLANTICE) {
-                        while (!pvz.CursorInWindow()) {
+                        while (pvz.GamePaused() || !pvz.CursorInWindow() || pvz.SelectType() != 0) {
                             usleep(ice_precision);
                         }
                         pvz.PlantSeed(slot, ice.position);

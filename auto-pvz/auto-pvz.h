@@ -145,6 +145,7 @@ void StartAutoCollectThread();
  * 窗口前置
  */
 #define WindowFront pvz.WindowFront
+#define SetWindowTopMost WindowFront
 /*
  * 按空格停止游戏/继续游戏
  */
@@ -154,5 +155,14 @@ void StartAutoCollectThread();
  * 注意，这个函数如果和女仆秘籍同时使用的话会出错！
  */
 #define PauseGame pvz.PauseGame
+/*
+ * 内置作弊功能
+ */
+#define JumpLevel pvz.ModifyEndlessLevel
+#define SetSun pvz.ModifySun
+#define SetMoney pvz.ModifyMoney
+#define ClearFog pvz.NoFog
+#define LockSun pvz.LockSun
+#define LockMoney pvz.LockMoney
 
 #endif /* auto_pvz_h */

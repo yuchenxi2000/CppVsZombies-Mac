@@ -422,10 +422,15 @@ void pe_16_ice() {
     Pao({{2, 9}, {5, 9}});
     Delay(1201-200-373+95+500);
     Pao({{2, 9}, {5, 9}});
+    Delay(600);
+    StartStopDancerThread();
     for (int wave = 10; wave <= 19; ++wave) {
         if (wave % 2 == 0) {
             Prejudge(-95, wave);
             Pao({{2, 9}, {5, 9}});
+            if (wave == 10) {
+                CancelStopDancerThread();
+            }
             Delay(108);
             Pao({{1, 9}, {5, 9}});
             
@@ -441,8 +446,10 @@ void pe_16_ice() {
                 Pao({{2, 9}, {5, 9}});
                 Delay(400);
                 Pao({{2, 9}, {5, 9}});
-                Delay(500);
+                Delay(400);
                 Pao({{2, 9}, {5, 9}});
+                Delay(600);
+                StartStopDancerThread();
             }
         }
     }
@@ -450,6 +457,7 @@ void pe_16_ice() {
     DelayedPao({4,7}, 30);
     Prejudge(-95, 20);
     Pao({{2, 9}, {5, 9}});
+    CancelStopDancerThread();
     Delay(108);
     Pao({{1, 9}, {5, 9}});
     Until(601 + 20 - 298); // 20cs 预判冰
